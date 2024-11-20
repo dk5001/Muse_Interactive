@@ -10,13 +10,14 @@ function setup() {
 
 function draw() {
   // Calculate average of accelerometer data for background color
-  let avgAccel = (accel.x + accel.y + accel.z) / 3;
-  let bgColor = map(avgAccel, -1, 1, 160, 230); // Map to white to black
-  background(bgColor);
+  // let avgAccel = (accel.x + accel.y + accel.z) / 3;
+  let bgColor = map(accel.x, 1, -1, 100, 255); // Map to white to black
+  background(bgColor, 10); // Add a slight transparency to the background for trails
   
   // Control rotation speed with beta waves
-  rotationSpeed = map(eeg.beta, 0, 1, 0.01, 0.05);
+  rotationSpeed = map(eeg.beta, 0, 4, 0.01, 0.05);
   angle += rotationSpeed; // Update angle for circular motion
+  console.log(rotationSpeed);
 
   // Calculate center position for circles
   let centerX = width / 2;
@@ -28,29 +29,29 @@ function draw() {
   noStroke();
   
   // Circle 1 - Red (controlled by muscle)
-  let size1 = map(state.muscle, 0, 1, 15, 50); // Size varies with muscle state
-  fill(map(state.muscle, 0, 1, 0, 255), 0, 0);
+  let size1 = map(state.muscle, 0, 1, 50, 80); // Size varies with muscle state
+  fill(map(state.muscle, 0, 1, 150, 255), 0, 0, 150); // Add opacity to fill
   let x1 = centerX + cos(angle) * motionRadius;
   let y1 = centerY + sin(angle) * motionRadius;
   circle(x1, y1, size1);
   
   // Circle 2 - Yellow (controlled by focus)
-  let size2 = map(state.focus, 0, 1, 15, 50); // Size varies with focus state
-  fill(map(state.focus, 0, 1, 0, 255), map(state.focus, 0, 1, 0, 255), 0);
+  let size2 = map(state.focus, 0, 1, 50, 80); // Size varies with focus state
+  fill(map(state.focus, 0, 1, 150, 255), map(state.focus, 0, 1, 0, 255), 0, 150); // Add opacity to fill
   let x2 = centerX + cos(angle + TWO_PI / 4) * motionRadius; // Offset for circular arrangement
   let y2 = centerY + sin(angle + TWO_PI / 4) * motionRadius;
   circle(x2, y2, size2);
   
   // Circle 3 - Green (controlled by clear)
-  let size3 = map(state.clear, 0, 1, 15, 50); // Size varies with clear state
-  fill(0, map(state.clear, 0, 1, 0, 255), 0);
+  let size3 = map(state.clear, 0, 1, 50, 80); // Size varies with clear state
+  fill(0, map(state.clear, 0, 1, 150, 255), 0, 150); // Add opacity to fill
   let x3 = centerX + cos(angle + TWO_PI / 2) * motionRadius; // Offset for circular arrangement
   let y3 = centerY + sin(angle + TWO_PI / 2) * motionRadius;
   circle(x3, y3, size3);
   
   // Circle 4 - Blue (controlled by meditation)
-  let size4 = map(state.meditation, 0, 1, 15, 50); // Size varies with meditation state
-  fill(0, 0, map(state.meditation, 0, 1, 0, 255));
+  let size4 = map(state.meditation, 0, 1, 50, 80); // Size varies with meditation state
+  fill(0, 0, map(state.meditation, 0, 1, 150, 255), 150); // Add opacity to fill
   let x4 = centerX + cos(angle + (3 * TWO_PI) / 4) * motionRadius; // Offset for circular arrangement
   let y4 = centerY + sin(angle + (3 * TWO_PI) / 4) * motionRadius;
   circle(x4, y4, size4);
@@ -61,15 +62,10 @@ function draw() {
   stroke(0); // Black stroke
   circle(centerX, centerY, centerCircleSize); // Center circle size changes with rotation speed
 
-  // Draw horizontal vertex graph for eegSpectrum
-  stroke(0); // Black stroke for the graph
-  strokeWeight(2);
+  // Draw rectangle in the center
   noFill();
-  beginShape();
-  for (let i = 0; i < eegSpectrum.length; i++) {
-    let x = map(i, 0, eegSpectrum.length - 1, 0, width);
-    let y = map(eegSpectrum[i], 0, 1, height, height / 2); // Map to the lower half of the canvas
-    vertex(x, y);
-  }
-  endShape();
+  stroke(0); // White stroke
+  let rectWidth = map(eeg.alpha, 0, 1, 0, 500); // Map horizontal length to eeg.alpha
+  let rectHeight = map(eeg.beta, 0, 1, 0, 300); // Map vertical length to eeg.beta
+  rect(centerX - rectWidth / 2, centerY - rectHeight / 2, rectWidth, rectHeight); // Draw rectangle centered
 }
