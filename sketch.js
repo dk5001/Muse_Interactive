@@ -59,13 +59,13 @@ function draw() {
   // Circle 5 - Center Circle (controlled by rotation speed)
   let centerCircleSize = map(rotationSpeed, 0.01, 0.05, 15, 50); // Size varies with rotation speed
   noFill();
-  stroke(0); // Black stroke
+  stroke(0); 
   circle(centerX, centerY, centerCircleSize); // Center circle size changes with rotation speed
 
   // Draw rectangle in the center
   noFill();
-  stroke(0); // White stroke
-  let rectWidth = map(eeg.alpha, 0, 1, 0, 500); // Map horizontal length to eeg.alpha
-  let rectHeight = map(eeg.beta, 0, 1, 0, 300); // Map vertical length to eeg.beta
+  stroke(0); 
+  let rectWidth = map(eeg.alpha, 0, 1, 0, 300); // Map horizontal length to eeg.alpha
+  let rectHeight = map(eeg.beta, 0, 1, 0, 200); // Map vertical length to eeg.beta
   rect(centerX - rectWidth / 2, centerY - rectHeight / 2, rectWidth, rectHeight); // Draw rectangle centered
 }
